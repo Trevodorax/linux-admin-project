@@ -1,5 +1,32 @@
 #!/bin/bash
 
+check_input() {
+  local inputFile="bad_source.txt"
+
+  while read line; do
+    # Split the line into fields using the delimiter :
+    IFS=':' read -ra fields <<< "$line"
+
+    # Check that there are exactly 5 fields
+    if [[ ${#fields[@]} -ne 5 ]]; then
+      echo "Error: Incorrect number of fields in line: $line"
+      return 1
+    fi
+
+    # Check that the 4th field (sudo) is either 'oui' or 'non'
+    if [[ ${fields[3]} != 'oui' ]] && [[ ${fields[3]} != 'non' ]]; then
+      echo "Error: Invalid value for sudo in line: $line"
+      return 1
+    fi
+
+    # Check that the 5th field (password) is not empty
+    if [[ -z ${fields[4]} ]]; then
+      echo "Error: Password is empty in line: $line"
+      return 1
+    fi
+  done < "$inputFile"
+}
+
 generate_login() {
   local firstName=$1
   local lastName=$2
@@ -70,6 +97,13 @@ create_files() {
 
 main() {
   local inputFile="source.txt"
+
+  # Check the input file
+  if ! check_input; then
+    echo "Input file check failed, exiting."
+    exit 1
+  fi
+  
   while read line; do
     local firstName=$(echo $line | cut -d: -f1)
     local lastName=$(echo $line | cut -d: -f2)

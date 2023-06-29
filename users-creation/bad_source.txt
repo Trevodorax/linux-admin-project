@@ -1,5 +1,5 @@
 Jean:Durand:admin,dev,marketing:oui:SecurePassword1
 Marie:Dupont:dev,test:non:SecurePassword2
 Andre:Neil:dev:oui:SecurePassword3
-Francois:Leblanc::non:SecurePassword4
-Alix:DeLafontaine:marketing,dev:oui:SecurePassword5
+Francois::Leblanc::non:SecurePassword4
+Alix:DeLafontaine:marketing,dev:oui:
