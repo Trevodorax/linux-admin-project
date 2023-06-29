@@ -31,6 +31,12 @@ generate_login() {
   local firstName=$1
   local lastName=$2
 
+  # Check if a user with the same first and last name already exists
+  existing_user=$(grep -i "$firstName.*$lastName" /etc/passwd)
+  if [ -n "$existing_user" ]; then
+    return 1
+  fi
+
   # tr allows us to bring everything to lowercase
   local login=$(echo "${firstName:0:1}$lastName" | tr '[:upper:]' '[:lower:]')
 
@@ -114,6 +120,12 @@ main() {
     local sudo=$(echo $line | cut -d: -f4)
     local password=$(echo $line | cut -d: -f5)
 
+    # Skip user creation if generate_login returns 1
+    if ! generate_login $firstName $lastName; then
+      echo "Skipping user creation for $firstName $lastName"
+      continue
+    fi
+
     local login=$(generate_login $firstName $lastName)
 
     if [[ -z "$groups" ]]; then
@@ -122,7 +134,7 @@ main() {
     local groupArray=($(create_groups $groups))
 
     local primaryGroup=${groupArray[0]}
-    # The syntax ${variable//pattern/replacement} means "replace all occurrences of pattern in variable with replacement".
+    # The syntax ${variable//pattern/replacement} means "replace all occurrences of pattern in variable with replacement"
     # This is used to remove the primary group from the secondary groups
     local secondaryGroups=${groups//${primaryGroup},/}
 
