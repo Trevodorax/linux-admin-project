@@ -54,7 +54,7 @@ create_user() {
 add_sudo() {
   local sudo=$1
   local login=$2
-  if [ "$sudo" == "yes" ]; then
+  if [ "$sudo" == "oui" ]; then
     usermod -aG sudo $login
   fi
 }
