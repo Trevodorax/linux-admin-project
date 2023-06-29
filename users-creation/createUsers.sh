@@ -93,7 +93,7 @@ create_files() {
 
   while [ $count -le $num_files ]
   do
-    truncate -s $(shuf -i 5-50 -n 1)M /home/$login/file$count
+    dd >/dev/null 2>/dev/null if=/dev/zero of=/home/$login/file$count bs=1M count=$(shuf -i 5-50 -n 1) 
     ((count++))
   done
 }
