@@ -1,7 +1,7 @@
 #!/bin/bash
 
 check_input() {
-  local inputFile="bad_source.txt"
+  local inputFile="source.txt"
 
   while read line; do
     # Split the line into fields using the delimiter :
@@ -52,7 +52,6 @@ create_groups() {
   # Create an array of groups
   IFS=',' read -ra groupArray <<< "$groups"
 
-
   for group in "${groupArray[@]}"; do
     # -q for (Q)uiet
     if ! grep -q "^$group:" /etc/group; then
@@ -88,10 +87,14 @@ add_sudo() {
 
 create_files() {
   local login=$1
-  # loops 5 to 10 times (-n means return only one line, so only one number)
-  for i in {1..$(shuf -i 5-10 -n 1)}; do
+  # Generate a random number between 5 and 10
+  local num_files=$(shuf -i 5-10 -n 1)
+  local count=1
 
-    truncate -s $(shuf -i 5-50 -n 1)M /home/$login/file$i
+  while [ $count -le $num_files ]
+  do
+    truncate -s $(shuf -i 5-50 -n 1)M /home/$login/file$count
+    ((count++))
   done
 }
 
@@ -103,7 +106,7 @@ main() {
     echo "Input file check failed, exiting."
     exit 1
   fi
-  
+
   while read line; do
     local firstName=$(echo $line | cut -d: -f1)
     local lastName=$(echo $line | cut -d: -f2)
