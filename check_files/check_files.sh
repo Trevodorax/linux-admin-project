@@ -13,16 +13,28 @@ old_file="last_list_of_files.txt"
 
 if [ -f $file -a -f $old_file ]
 then
-	diff=$(diff $file $old_file)
+	diff=$(diff $file $old_file | grep -E "^< " | cut -d' ' -f2)
 	if [ -n "$diff" ]	
 	then
+		echo -e "\e[31m WARNING: DIFFERENCES FOUND ON :\e[0m"
+		echo $diff
+		last_line=""
 		while IFS= read -r modified_file; do
 			#GET THE FILE LAST MODIFICATION DATE WITH FORMAT DATE
-			date=$(stat -c%y modified_file)
-			echo "-$modified_file modified on : $date"
+			if [ -f $modified_file ]
+			then
+
+				if [ $last_file != $modified_file ]
+				then
+					date=$(stat -c%y $modified_file)
+					echo "$modified_file modified on : $date"
+				fi
+			fi
+			last_file=$modified_file
 		done <<< $diff	
 	else 
 		echo -e "\033[0;32mNo changes since last launch of the script !\033[0m"
+		echo "Check $file."
 	fi
 fi
 
