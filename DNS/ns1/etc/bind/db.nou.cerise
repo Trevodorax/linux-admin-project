@@ -1,0 +1,13 @@
+@ IN SOA ns1.nou.cerise. admin.nou.cerise. (
+  1
+  3h
+  1h
+  1w
+  1h
+)
+
+@ IN NS ns1.nou.cerise.
+
+ns1 IN  A     10.0.15.101
+ns2 IN  A     10.0.15.102
+god IN  CNAME ns1
