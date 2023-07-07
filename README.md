@@ -1,2 +1,0 @@
-# linux-admin-project
-konar

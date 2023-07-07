@@ -1,5 +1,5 @@
-auto ens33
-iface ens33 inet static
+auto ens36
+iface ens36 inet static
   address 10.0.15.101
   netmask 255.255.255.0
   dns-nameservers 127.0.0.1

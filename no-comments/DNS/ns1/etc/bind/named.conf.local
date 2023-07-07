@@ -1,0 +1,9 @@
+zone "nou.cerise" {
+  type master
+  file "/etc/bind/db.nou.cerise"
+};
+
+zone "15.0.10.in-adddr.arpa" {
+  type master
+  file "/etc/bind/db.15.0.10.in-addr.arpa"
+};
